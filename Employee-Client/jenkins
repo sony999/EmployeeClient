@@ -1,0 +1,97 @@
+pipeline{
+
+ 
+agent any
+
+ 
+stages
+
+ 
+{
+
+ 
+stage('Build')
+
+ 
+{
+
+ 
+steps{
+
+ 
+echo "Building the Code.........."
+
+ 
+bat "mvn clean -f C:\\Users\\sonakshikumari\\git\\repository5\\Employee-Client\\pom.xml"
+ 
+}
+ 
+}
+
+ 
+stage('Test')
+
+ 
+{
+
+ 
+steps{
+
+ 
+echo "Testing the Code.........."
+
+ 
+bat "mvn test -f C:\\Users\\sonakshikumari\\git\\repository5\\Employee-Client\\pom.xml"
+
+ 
+}
+
+ 
+}
+
+ 
+stage('Compile')
+
+ 
+{
+
+ 
+steps{
+
+ 
+echo "Compiling the Project.........."
+
+ 
+bat "mvn compile -f C:\\Users\\sonakshikumari\\git\\repository5\\Employee-Client\\pom.xml"
+
+ 
+}
+
+ 
+}
+
+ 
+stage('Deploy')
+
+ 
+{
+
+ 
+steps{
+
+ 
+echo "Deploying the Project.........."
+
+ 
+}
+
+ 
+}
+
+ 
+}
+
+ 
+}
+
+
