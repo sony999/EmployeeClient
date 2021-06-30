@@ -1,0 +1,77 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/css/uikit.min.css" />
+	</head>
+	<body>
+	<h6 style="float: right">Logout <a th:href="@{/logout}"  class="uk-margin-small-right"  uk-icon="sign-out"></a></h6>
+		<span th:if="${session.userID == null}">
+			<script type="text/javascript">
+				window.location.href = "/";
+			</script>
+		</span>
+		<h1>Employee Details</h1>
+		<br>
+		<div style="margin: 20px">
+			 <form action="#" th:action="@{/update}" method="post" th:object="${employee}">
+			 		 <input class="uk-input" th:field="${empData.employeeCode}"  type="hidden" placeholder="Name" required>
+     		   		 <div class="uk-margin">
+			            <input  id="name" onkeyup="checkName()" class="uk-input" th:field="${empData.employeeName}"  type="text" placeholder="Name" required>
+			        </div>
+			        <div class="uk-margin">
+			            <input id="location" onkeyup="checkLocation()" class="uk-input" th:field="${empData.location}" type="text" placeholder="Location" required>
+			        </div>
+			        <div class="uk-margin">
+			            <input  id="email" onkeyup="checkEmail()" class="uk-input" th:field="${empData.email}" type="text" placeholder="Email" required>
+			        </div>
+			        <div class="uk-margin">
+			            <input id="dob" onkeyup="checkDob()" class="uk-input" th:field="${empData.dateOfBirth}" type="text" placeholder="DOB" required>
+			        </div>
+     		  		
+     		  		 <input type="submit" uk-toggle class="uk-button uk-button-secondary" placeholder="Update">
+        	</form>
+        	
+        		 
+        		<p id="nameError" style="color: red; display: none">Name must be less than 100 charecters!</p>
+				<p id="locError" style="color: red; display: none">Location must be less than 500 charecters!</p>
+				<p id="dobError" style="color: red; display: none">Date of birth must valid!</p>
+	        	<p id="emailError" style="color: red; display: none">Email Must be valid!</p>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit-icons.min.js"></script>
+	</body>
+	<script>
+
+	function checkName() {
+		let name = document.getElementById("name").value;
+		if(name.length > 100) {
+			document.getElementById("nameError").style.display= "block";
+			setTimeout(() => { document.getElementById("nameError").style.display= "none"; } , 2000);
+		}
+	}
+
+	function checkLocation() {
+		let location = document.getElementById("location").value;
+		if(location.length > 500) {
+			document.getElementById("locError").style.display= "block";
+			setTimeout(() => { document.getElementById("locError").style.display= "none"; } , 2000);
+		}
+	}
+
+	function checkDob() {
+		let dob = document.getElementById("dob").value;
+		if(dob.length > 500) {
+			document.getElementById("dobError").style.display= "block";
+			setTimeout(() => { document.getElementById("dobError").style.display= "none"; } , 2000);
+		}
+	}
+
+	function checkEmail() {
+		let email = document.getElementById("email").value;
+		if(email.length > 100) {
+			document.getElementById("emailError").style.display= "block";
+			setTimeout(() => { document.getElementById("emailError").style.display= "none"; } , 2000);
+		}
+	}
+
+	</script>
+</html>

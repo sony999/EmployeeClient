@@ -1,0 +1,140 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/css/uikit.min.css" />
+	</head>
+	<body>
+	
+		<span th:if="${session.userID == null}">
+			<script type="text/javascript">
+				window.location.href = "/";
+			</script>
+		</span>
+		
+		<h1>Employee DashBoard  <a th:href="@{/logout}"  class="uk-margin-small-right"  uk-icon="sign-out"></a></h1>
+	
+	<p style="float:right; margin:10px" uk-margin>
+	    <a href="#modal-example" uk-toggle class="uk-button uk-button-secondary">Create Employee</a>
+	    <button id="download-btn" class="uk-button uk-button-danger">Download data</button>
+	</p>
+		<table style="margin:50px" class="uk-table uk-table-striped">
+	    <thead>
+	        <tr>
+	            <th>Employee Number</th>
+	            <th>Employee Name</th>
+	            <th>Employee Location</th>
+	            <th>Employee dob</th>
+	             <th>Employee Email</th>
+	             <th>Actions</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr th:each="f: ${employees}">
+		        <td th:text="${f.employeeCode}"></td>
+		        <td th:text="${f.employeeName}"></td>
+		        <td th:text="${f.location}"></td>
+		        <td th:text="${f.dateOfBirth}"></td>
+		        <td th:text="${f.email}"></td>
+		        <td>
+					 <a  class="uk-margin-small-right" uk-icon="pencil" th:href="@{/edit/{employeeCode}(employeeCode=${f.employeeCode})}"></a> 
+		        </td>
+	        </tr>
+	    </tbody>
+	
+	</table>
+	
+	<div id="modal-example" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Create Employee</h2>
+     		   <form action="#" th:action="@{/create}" method="post" th:object="${employee}">
+     		   		 <div class="uk-margin">
+			            <input id="name" onkeyup="checkName()" class="uk-input" th:field="*{employeeName}" type="text" placeholder="Name" required>
+			        </div>
+			        <div class="uk-margin">
+			            <input id="location" onkeyup="checkLocation()" class="uk-input" th:field="*{location}" type="text" placeholder="Location" required>
+			        </div>
+			        <div class="uk-margin">
+			            <input  id="email" onkeyup="checkEmail()" class="uk-input" th:field="*{email}" type="text" placeholder="Email" required>
+			        </div>
+			        <div class="uk-margin">
+			            <input id="dob" onkeyup="checkDob()" class="uk-input" th:field="*{dateOfBirth}" type="text" placeholder="DOB" required>
+			        </div>
+     		  		
+     		  		 <input type="submit" uk-toggle class="uk-button uk-button-secondary" placeholder="Create">
+        		 </form>
+        		 
+        		<p id="nameError" style="color: red; display: none">Name must be less than 100 charecters!</p>
+				<p id="locError" style="color: red; display: none">Location must be less than 500 charecters!</p>
+				<p id="dobError" style="color: red; display: none">Date of birth must valid!</p>
+	        	<p id="emailError" style="color: red; display: none">Email Must be valid!</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit-icons.min.js"></script>
+<script>
+
+
+function checkName() {
+	let name = document.getElementById("name").value;
+	if(name.length > 100) {
+		document.getElementById("nameError").style.display= "block";
+		setTimeout(() => { document.getElementById("nameError").style.display= "none"; } , 2000);
+	}
+}
+
+function checkLocation() {
+	let location = document.getElementById("location").value;
+	if(location.length > 500) {
+		document.getElementById("locError").style.display= "block";
+		setTimeout(() => { document.getElementById("locError").style.display= "none"; } , 2000);
+	}
+}
+
+function checkDob() {
+	let dob = document.getElementById("dob").value;
+	if(dob.length > 500) {
+		document.getElementById("dobError").style.display= "block";
+		setTimeout(() => { document.getElementById("dobError").style.display= "none"; } , 2000);
+	}
+}
+
+function checkEmail() {
+	let email = document.getElementById("email").value;
+	if(email.length > 100) {
+		document.getElementById("emailError").style.display= "block";
+		setTimeout(() => { document.getElementById("emailError").style.display= "none"; } , 2000);
+	}
+}
+
+
+function download_csv(csv, filename) {
+    var csvFile;
+    var downloadLink;
+    csvFile = new Blob([csv], {type: "text/csv"});
+    downloadLink = document.createElement("a");
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+}
+
+function export_table_to_csv(html, filename) {
+	var csv = [];
+	var rows = document.querySelectorAll("table tr");
+    for (var i = 0; i < rows.length; i++) {
+		var row = [], cols = rows[i].querySelectorAll("td, th");
+        for (var j = 0; j < cols.length; j++) 
+            row.push(cols[j].innerText);
+        
+		csv.push(row.join(","));		
+	}
+    download_csv(csv.join("\n"), filename);
+}
+
+document.getElementById("download-btn").addEventListener("click", function () {
+    var html = document.querySelector("table").outerHTML;
+	export_table_to_csv(html, "table.csv");
+});
+</script>
+	</body>
+</html>

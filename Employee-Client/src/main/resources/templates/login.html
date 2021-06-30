@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Auth</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/css/uikit.min.css" />
+	</head>
+	<body style="margin: 40px"> 
+		<br>
+		<h1>Login</h1>
+		<span th:if="${session.userID != null}">
+			<script type="text/javascript">
+				window.location.href = "home";
+			</script>
+		</span>
+		<form th:action="@{/signin}" th:object="${user}" method="POST">
+			username: <input id="username" onkeyup="checkUsername()" class="uk-input" th:field="*{username}" required>
+			<br><br>
+			password: <input id="password" onkeyup="checkPassword()" class="uk-input" type="password" th:field="*{password}" required>
+			<br><br>
+			<button class="uk-button uk-button-danger" type="submit">Sign in</button>
+		</form>
+		<p id="userError" style="color: red; display: none">Username must be in bet 5 to 50 chars</p>
+		<p id="passError" style="color: red; display: none">Location must be in bet 5 to 50 chars</p>
+	</body>
+	
+	<script>
+		const checkUsername = () => {
+			let username = document.getElementById("username").value;
+
+			if(username.length < 3 || username.length > 50) {
+				document.getElementById("userError").style.display= "block";
+				setTimeout(() => { document.getElementById("userError").style.display= "none"; } , 2000);
+			}
+		}
+		
+		const checkPassword = () => {
+			let password = document.getElementById("password").value;
+			if(password.length < 3 || password.length > 50) {
+				document.getElementById("passError").style.display= "block";
+				setTimeout(() => { document.getElementById("passError").style.display= "none"; } , 2000);
+			}
+		}
+	</script>
+</html>
